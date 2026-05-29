@@ -1,0 +1,40 @@
+{
+  "kind": "composite",
+  "id": "floor",
+  "name": "Floor (L + stair + R)",
+  "children": [
+    {
+      "ref": "apartment",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none",
+      "label": "LHS apartment"
+    },
+    {
+      "ref": "stairwell",
+      "offset": [
+        7,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none",
+      "label": "Stairwell"
+    },
+    {
+      "ref": "apartment",
+      "offset": [
+        10,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "x",
+      "label": "RHS apartment (mirrored)"
+    }
+  ]
+}

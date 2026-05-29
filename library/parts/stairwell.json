@@ -1,0 +1,62 @@
+{
+  "kind": "leaf",
+  "id": "stairwell",
+  "name": "Stairwell",
+  "size": [
+    3,
+    5,
+    7
+  ],
+  "palette": [
+    {
+      "name": "minecraft:gray_concrete",
+      "states": {},
+      "version": 18168865
+    },
+    {
+      "name": "minecraft:stone",
+      "states": {},
+      "version": 18168865
+    }
+  ],
+  "cells": [
+    1,
+    7,
+    0,
+    21,
+    -1,
+    7,
+    1,
+    8,
+    -1,
+    5,
+    0,
+    2,
+    1,
+    1,
+    -1,
+    4,
+    0,
+    2,
+    -1,
+    1,
+    1,
+    1,
+    -1,
+    3,
+    0,
+    1,
+    -1,
+    3,
+    1,
+    1,
+    -1,
+    3,
+    1,
+    7,
+    0,
+    21,
+    -1,
+    7
+  ]
+}

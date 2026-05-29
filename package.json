@@ -1,0 +1,40 @@
+{
+  "name": "minecraft-structure-editor",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Parametric composition editor for Minecraft Bedrock .mcstructure files — build a library of reusable components and assemble them into larger structures.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "seed:library": "vite-node scripts/seed-library.ts",
+    "build:library": "vite-node scripts/build-library.ts",
+    "import": "vite-node scripts/import-file.ts",
+    "deploy": "powershell -ExecutionPolicy Bypass -File scripts/deploy-bedrock.ps1 -Pack -Clean",
+    "sync": "vite-node scripts/build-library.ts && powershell -ExecutionPolicy Bypass -File scripts/deploy-bedrock.ps1 -Pack -Clean",
+    "mcpack": "vite-node scripts/build-library.ts && powershell -ExecutionPolicy Bypass -File scripts/build-mcpack.ps1",
+    "export:demo": "vite-node scripts/export-demo.ts"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/three": "^0.169.0",
+    "@vitejs/plugin-react": "^4.3.3",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "vitest": "^2.1.4"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "kind": "composite",
+  "id": "tower",
+  "name": "Tower (floor ×3)",
+  "children": [
+    {
+      "ref": "floor",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none",
+      "label": "Floors",
+      "repeat": {
+        "count": 3,
+        "step": [
+          0,
+          5,
+          0
+        ]
+      }
+    }
+  ]
+}

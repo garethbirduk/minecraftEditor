@@ -1,0 +1,10 @@
+node_modules/
+dist/
+out/
+# pack/manifest.json IS tracked (stable UUIDs); dist/*.mcpack is a build output.
+*.local
+.DS_Store
+
+# The library/ folder (one JSON per component) is the source of truth — tracked.
+# ./out holds generated .mcstructure artifacts — regenerable, not tracked.
+incoming/

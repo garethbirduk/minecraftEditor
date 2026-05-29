@@ -1,0 +1,175 @@
+{
+  "kind": "leaf",
+  "id": "field",
+  "name": "field",
+  "size": [
+    6,
+    3,
+    4
+  ],
+  "palette": [
+    {
+      "name": "minecraft:dirt",
+      "states": {},
+      "version": 18168865
+    },
+    {
+      "name": "minecraft:acacia_planks",
+      "states": {},
+      "version": 18168865
+    },
+    {
+      "name": "minecraft:cobblestone_wall",
+      "states": {
+        "wall_connection_type_east": "short",
+        "wall_connection_type_north": "none",
+        "wall_connection_type_south": "short",
+        "wall_connection_type_west": "none",
+        "wall_post_bit": true
+      },
+      "version": 18168865
+    },
+    {
+      "name": "minecraft:cobblestone_wall",
+      "states": {
+        "wall_connection_type_east": "none",
+        "wall_connection_type_north": "short",
+        "wall_connection_type_south": "short",
+        "wall_connection_type_west": "none",
+        "wall_post_bit": false
+      },
+      "version": 18168865
+    },
+    {
+      "name": "minecraft:cobblestone_wall",
+      "states": {
+        "wall_connection_type_east": "short",
+        "wall_connection_type_north": "short",
+        "wall_connection_type_south": "none",
+        "wall_connection_type_west": "none",
+        "wall_post_bit": true
+      },
+      "version": 18168865
+    },
+    {
+      "name": "minecraft:cobblestone_wall",
+      "states": {
+        "wall_connection_type_east": "short",
+        "wall_connection_type_north": "none",
+        "wall_connection_type_south": "none",
+        "wall_connection_type_west": "short",
+        "wall_post_bit": false
+      },
+      "version": 18168865
+    },
+    {
+      "name": "minecraft:air",
+      "states": {},
+      "version": 18168865
+    },
+    {
+      "name": "minecraft:cobblestone_wall",
+      "states": {
+        "wall_connection_type_east": "none",
+        "wall_connection_type_north": "none",
+        "wall_connection_type_south": "none",
+        "wall_connection_type_west": "short",
+        "wall_post_bit": true
+      },
+      "version": 18168865
+    },
+    {
+      "name": "minecraft:cobblestone_wall",
+      "states": {
+        "wall_connection_type_east": "short",
+        "wall_connection_type_north": "none",
+        "wall_connection_type_south": "none",
+        "wall_connection_type_west": "none",
+        "wall_post_bit": true
+      },
+      "version": 18168865
+    },
+    {
+      "name": "minecraft:cobblestone_wall",
+      "states": {
+        "wall_connection_type_east": "none",
+        "wall_connection_type_north": "none",
+        "wall_connection_type_south": "short",
+        "wall_connection_type_west": "short",
+        "wall_post_bit": true
+      },
+      "version": 18168865
+    },
+    {
+      "name": "minecraft:cobblestone_wall",
+      "states": {
+        "wall_connection_type_east": "none",
+        "wall_connection_type_north": "short",
+        "wall_connection_type_south": "none",
+        "wall_connection_type_west": "short",
+        "wall_post_bit": true
+      },
+      "version": 18168865
+    }
+  ],
+  "cells": [
+    0,
+    4,
+    1,
+    4,
+    2,
+    1,
+    3,
+    2,
+    4,
+    1,
+    0,
+    4,
+    1,
+    4,
+    5,
+    1,
+    6,
+    2,
+    5,
+    1,
+    0,
+    4,
+    1,
+    4,
+    7,
+    1,
+    6,
+    2,
+    5,
+    1,
+    0,
+    4,
+    1,
+    4,
+    6,
+    3,
+    5,
+    1,
+    0,
+    4,
+    1,
+    4,
+    8,
+    1,
+    6,
+    2,
+    5,
+    1,
+    0,
+    4,
+    1,
+    4,
+    9,
+    1,
+    3,
+    2,
+    10,
+    1
+  ]
+}
