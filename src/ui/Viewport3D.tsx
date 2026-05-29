@@ -18,6 +18,10 @@ import { colorForBlock, isTransparentBlock } from "../core/blocks/colors.js";
 
 interface Props {
   grid: VoxelGrid | null;
+  /** Changes only when a different component is selected. The camera re-frames
+   *  on a new frameKey, but NOT on every grid edit — so nudging an offset keeps
+   *  your current view instead of resetting it. */
+  frameKey: string;
 }
 
 interface Visible {
@@ -55,7 +59,7 @@ function collectVisible(grid: VoxelGrid): Visible[] {
   return out;
 }
 
-export function Viewport3D({ grid }: Props): JSX.Element {
+export function Viewport3D({ grid, frameKey }: Props): JSX.Element {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const sceneRef = useRef<{
     renderer: THREE.WebGLRenderer;
@@ -127,16 +131,19 @@ export function Viewport3D({ grid }: Props): JSX.Element {
     };
   }, []);
 
-  // Rebuild content whenever the grid changes.
+  // Rebuild geometry whenever the grid changes — but DON'T touch the camera,
+  // so editing offsets keeps the current view.
   useEffect(() => {
     const state = sceneRef.current;
     if (!state) return;
-    const { content, controls, camera } = state;
+    const { content } = state;
 
-    // Clear previous content.
     for (const child of [...content.children]) {
       content.remove(child);
       if (child instanceof THREE.Mesh) {
+        child.geometry.dispose();
+        (child.material as THREE.Material).dispose();
+      } else if (child instanceof THREE.LineSegments) {
         child.geometry.dispose();
         (child.material as THREE.Material).dispose();
       }
@@ -155,24 +162,28 @@ export function Viewport3D({ grid }: Props): JSX.Element {
     });
     mesh.instanceMatrix.needsUpdate = true;
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
-    // Centre the structure at the origin for nicer orbiting.
-    content.position.set(-grid.sx / 2, -grid.sy / 2, -grid.sz / 2);
     content.add(mesh);
 
-    // Wireframe bounds.
     const box = new THREE.LineSegments(
       new THREE.EdgesGeometry(new THREE.BoxGeometry(grid.sx, grid.sy, grid.sz)),
       new THREE.LineBasicMaterial({ color: 0x2a2b35 }),
     );
     box.position.set(grid.sx / 2, grid.sy / 2, grid.sz / 2);
     content.add(box);
+  }, [grid]);
 
-    // Frame the camera to the structure.
-    const radius = Math.max(grid.sx, grid.sy, grid.sz);
+  // Re-centre + frame the camera ONLY when a different component is selected.
+  useEffect(() => {
+    const state = sceneRef.current;
+    if (!state || !grid || grid.volume === 0) return;
+    const { content, controls, camera } = state;
+    content.position.set(-grid.sx / 2, -grid.sy / 2, -grid.sz / 2);
+    const radius = Math.max(grid.sx, grid.sy, grid.sz) || 16;
     controls.target.set(0, 0, 0);
     camera.position.set(radius * 1.1, radius * 1.0, radius * 1.4);
     controls.update();
-  }, [grid]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [frameKey]);
 
   return <div className="viewport-canvas" ref={mountRef} style={{ width: "100%", height: "100%" }} />;
 }

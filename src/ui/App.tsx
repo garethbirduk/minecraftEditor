@@ -22,6 +22,7 @@ const defaultCategory = (kind: "leaf" | "composite"): string =>
   kind === "leaf" ? "parts" : "composites";
 
 type SaveState = "idle" | "saving" | "saved" | "error";
+type SyncState = "idle" | "syncing" | "synced" | "error";
 
 export function App(): JSX.Element {
   const demo = useMemo(() => buildDemoLibrary(), []);
@@ -36,13 +37,15 @@ export function App(): JSX.Element {
   const [rev, setRev] = useState(0);
   const bump = (): void => {
     setRev((v) => v + 1);
-    setSaveState("idle"); // edits invalidate the "saved" indicator
+    setSaveState("idle"); // edits invalidate the "saved"/"synced" indicators
+    setSyncState("idle");
   };
 
   const [selectedId, setSelectedId] = useState<ComponentId>(demo.rootId);
   const [error, setError] = useState<string | null>(null);
   const [source, setSource] = useState<"demo" | "library/">("demo");
   const [saveState, setSaveState] = useState<SaveState>("idle");
+  const [syncState, setSyncState] = useState<SyncState>("idle");
   const fileInput = useRef<HTMLInputElement | null>(null);
 
   // On mount, try to load the git-tracked library/ folder via the dev endpoint;
@@ -77,21 +80,44 @@ export function App(): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Persist the current in-memory library to the library/ folder. Shared by
+  // Save and Sync (Sync must write the folder first so the bake is current).
+  const postLibrary = async (): Promise<boolean> => {
+    const components = [...libRef.current.components.values()].map((c) => ({
+      category: categoryRef.current.get(c.id) ?? defaultCategory(c.kind),
+      ...componentToJSON(c),
+    }));
+    const res = await fetch("/__library", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ components }),
+    });
+    return res.ok;
+  };
+
   const onSave = async (): Promise<void> => {
     setSaveState("saving");
     try {
-      const components = [...libRef.current.components.values()].map((c) => ({
-        category: categoryRef.current.get(c.id) ?? defaultCategory(c.kind),
-        ...componentToJSON(c),
-      }));
-      const res = await fetch("/__library", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ components }),
-      });
-      setSaveState(res.ok ? "saved" : "error");
+      setSaveState((await postLibrary()) ? "saved" : "error");
     } catch {
       setSaveState("error");
+    }
+  };
+
+  // Save, then run `npm run sync` server-side (bake + deploy into Minecraft).
+  const onSync = async (): Promise<void> => {
+    setSyncState("syncing");
+    try {
+      if (!(await postLibrary())) {
+        setSyncState("error");
+        return;
+      }
+      setSaveState("saved");
+      const res = await fetch("/__sync", { method: "POST" });
+      const data = (await res.json()) as { ok: boolean };
+      setSyncState(data.ok ? "synced" : "error");
+    } catch {
+      setSyncState("error");
     }
   };
 
@@ -127,6 +153,92 @@ export function App(): JSX.Element {
     if (!p) return;
     const order = ["none", "x", "z"] as const;
     p.mirror = order[(order.indexOf(p.mirror) + 1) % order.length]!;
+    bump();
+  };
+
+  // ---- composition editing -------------------------------------------------
+  const createComposite = (): void => {
+    let n = 1;
+    let id = `composite-${n}`;
+    while (lib.components.has(id)) id = `composite-${++n}`;
+    addComponent(lib, { kind: "composite", id, name: "New composite", children: [] });
+    categoryRef.current.set(id, "composites");
+    setSelectedId(id);
+    bump();
+  };
+  const addChild = (parentId: ComponentId, refId: ComponentId): void => {
+    const parent = lib.components.get(parentId);
+    if (parent?.kind !== "composite" || !refId) return;
+    parent.children.push({ ref: refId, offset: [0, 0, 0], rotationY: 0, mirror: "none" });
+    bump();
+  };
+  const setOffset = (parentId: ComponentId, index: number, axis: 0 | 1 | 2, value: number): void => {
+    const parent = lib.components.get(parentId);
+    if (parent?.kind !== "composite") return;
+    const p = parent.children[index];
+    if (!p) return;
+    const o: [number, number, number] = [p.offset[0], p.offset[1], p.offset[2]];
+    o[axis] = Number.isFinite(value) ? Math.round(value) : 0;
+    p.offset = o;
+    bump();
+  };
+  const removeChild = (parentId: ComponentId, index: number): void => {
+    const parent = lib.components.get(parentId);
+    if (parent?.kind !== "composite") return;
+    parent.children.splice(index, 1);
+    bump();
+  };
+  // Snap a placement so it abuts the PREVIOUS sibling along an axis: copy the
+  // previous offset and step by the previous component's footprint (accounting
+  // for its rotation). Turns "tile a row" into one click per piece.
+  const snapToPrev = (parentId: ComponentId, index: number, axis: 0 | 1 | 2): void => {
+    const parent = lib.components.get(parentId);
+    if (parent?.kind !== "composite" || index <= 0) return;
+    const p = parent.children[index];
+    const prev = parent.children[index - 1];
+    if (!p || !prev) return;
+    let pg: VoxelGrid;
+    try {
+      pg = bake(lib, prev.ref).grid;
+    } catch {
+      return;
+    }
+    let dx = pg.sx;
+    let dz = pg.sz;
+    if (prev.rotationY === 90 || prev.rotationY === 270) [dx, dz] = [dz, dx];
+    const step = axis === 0 ? dx : axis === 1 ? pg.sy : dz;
+    const o: [number, number, number] = [prev.offset[0], prev.offset[1], prev.offset[2]];
+    o[axis] = prev.offset[axis] + step;
+    p.offset = o;
+    bump();
+  };
+  // Rename: sets the display name AND derives a slug id (the export name,
+  // mystructure:<id>). Updates the map key, every placement that refs it, and
+  // the category map. Keeps ids unique.
+  const renameComponent = (oldId: ComponentId, newName: string): void => {
+    const comp = lib.components.get(oldId);
+    if (!comp) return;
+    comp.name = newName;
+    let newId = slugify(newName);
+    if (newId !== oldId) {
+      if (lib.components.has(newId)) {
+        let n = 2;
+        while (lib.components.has(`${newId}-${n}`)) n++;
+        newId = `${newId}-${n}`;
+      }
+      comp.id = newId;
+      lib.components.delete(oldId);
+      lib.components.set(newId, comp);
+      for (const c of lib.components.values()) {
+        if (c.kind === "composite") {
+          for (const ch of c.children) if (ch.ref === oldId) ch.ref = newId;
+        }
+      }
+      const cat = categoryRef.current.get(oldId);
+      categoryRef.current.delete(oldId);
+      categoryRef.current.set(newId, cat ?? defaultCategory(comp.kind));
+      if (selectedId === oldId) setSelectedId(newId);
+    }
     bump();
   };
 
@@ -189,7 +301,21 @@ export function App(): JSX.Element {
                 ? "Save failed"
                 : "Save library"}
         </button>
-        <button className="primary" onClick={onExport} disabled={!grid}>
+        <button
+          className="primary"
+          onClick={() => void onSync()}
+          disabled={source !== "library/" || syncState === "syncing"}
+          title="Save the library, then bake + deploy everything into Minecraft"
+        >
+          {syncState === "syncing"
+            ? "Syncing…"
+            : syncState === "synced"
+              ? "Synced → MC ✓"
+              : syncState === "error"
+                ? "Sync failed"
+                : "Sync → MC"}
+        </button>
+        <button onClick={onExport} disabled={!grid}>
           Export baked
         </button>
         <input
@@ -206,7 +332,12 @@ export function App(): JSX.Element {
       </div>
 
       <div className="sidebar">
-        <div className="section-title">Library</div>
+        <div className="section-title row">
+          <span>Library</span>
+          <button className="mini" title="Create an empty composite" onClick={createComposite}>
+            ＋ composite
+          </button>
+        </div>
         {components.map((c) => (
           <div
             key={c.id}
@@ -225,22 +356,59 @@ export function App(): JSX.Element {
           </div>
         ))}
 
+        {selected && (
+          <div className="selected-edit">
+            <div className="section-title">Name</div>
+            <NameEditor
+              key={selected.id}
+              name={selected.name}
+              onCommit={(v) => renameComponent(selected.id, v)}
+            />
+            <div className="id-hint">
+              loads as <b>mystructure:{selected.id}</b>
+            </div>
+          </div>
+        )}
+
         {selected?.kind === "composite" && (
           <div className="tree">
-            <div className="section-title">Composition</div>
+            <div className="section-title row">
+              <span>Composition</span>
+            </div>
+            <div className="add-child">
+              <select
+                value=""
+                onChange={(e) => {
+                  if (e.target.value) addChild(selected.id, e.target.value);
+                  e.target.value = "";
+                }}
+              >
+                <option value="">＋ add component…</option>
+                {components
+                  .filter((c) => c.id !== selected.id)
+                  .map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} ({c.kind})
+                    </option>
+                  ))}
+              </select>
+            </div>
             <CompositionTree
               lib={lib}
               root={selected}
               onSelect={setSelectedId}
               onRotate={rotatePlacement}
               onMirror={cycleMirror}
+              onSetOffset={setOffset}
+              onRemove={removeChild}
+              onSnap={snapToPrev}
             />
           </div>
         )}
       </div>
 
       <div className="viewport-wrap">
-        <Viewport3D grid={grid} />
+        <Viewport3D grid={grid} frameKey={selectedId} />
         <div className="overlay tl">
           <b>{selected?.name ?? "—"}</b>
           {stats && (
@@ -282,4 +450,33 @@ function uniqueId(lib: Library, base: string): ComponentId {
   let n = 1;
   while (lib.components.has(id)) id = `${base}-${++n}`;
   return id;
+}
+
+/** A Bedrock-safe id: lowercase, [a-z0-9_], used as the structure name. */
+function slugify(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "") || "component";
+}
+
+/**
+ * Editable name field. Keeps a local draft so renaming (which churns the id and
+ * references) only happens on commit (blur / Enter), not on every keystroke.
+ */
+function NameEditor({ name, onCommit }: { name: string; onCommit: (v: string) => void }): JSX.Element {
+  const [draft, setDraft] = useState(name);
+  const commit = (): void => {
+    const v = draft.trim();
+    if (v && v !== name) onCommit(v);
+  };
+  return (
+    <input
+      className="name-input"
+      value={draft}
+      spellCheck={false}
+      onChange={(e) => setDraft(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") e.currentTarget.blur();
+      }}
+    />
+  );
 }

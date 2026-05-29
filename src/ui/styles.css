@@ -164,3 +164,86 @@ button.primary:hover:not(:disabled) { background: #2a2113; }
 }
 .tree-row .chip:hover { border-color: var(--accent); color: var(--text); }
 .tree-row .chip.on { color: var(--accent); border-color: var(--accent); }
+.tree-row .chip.remove { color: var(--warn); margin-left: auto; }
+.tree-row .size-hint { color: var(--muted); font-size: 10px; }
+
+.section-title.row { display: flex; align-items: center; justify-content: space-between; }
+button.mini {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.add-child { padding: 4px 14px 8px; }
+.add-child select {
+  width: 100%;
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-family: inherit;
+  font-size: 12px;
+}
+.tree-empty { padding: 8px 14px; color: var(--muted); font-size: 12px; }
+
+.selected-edit { padding: 0 14px 6px; }
+.name-input {
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-family: inherit;
+  font-size: 13px;
+}
+.name-input:focus { outline: none; border-color: var(--accent); }
+.id-hint { color: var(--muted); font-size: 11px; margin-top: 4px; }
+.id-hint b { color: var(--accent-2); }
+
+.tree-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-bottom: 5px;
+  flex-wrap: wrap;
+}
+.tree-controls .offset {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.tree-controls .offset input {
+  width: 42px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-family: inherit;
+  font-size: 11px;
+}
+.tree-controls .chip {
+  font-family: inherit;
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--muted);
+  cursor: pointer;
+}
+.tree-controls .chip:hover { border-color: var(--accent); color: var(--text); }
+.tree-controls .chip.on { color: var(--accent); border-color: var(--accent); }
+.tree-controls .snap {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.tree-controls .snap .chip { color: var(--accent-2); }
