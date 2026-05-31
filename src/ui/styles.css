@@ -84,14 +84,31 @@ button.primary:hover:not(:disabled) { background: #2a2113; }
 }
 
 .lib-item {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: 8px 14px;
+  padding: 8px 28px 8px 14px;
   cursor: pointer;
   border-left: 3px solid transparent;
 }
 .lib-item:hover { background: var(--panel-2); }
+.lib-del {
+  position: absolute;
+  right: 8px;
+  top: 7px;
+  padding: 0 5px;
+  font-size: 11px;
+  line-height: 1.4;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  opacity: 0;
+  cursor: pointer;
+}
+.lib-item:hover .lib-del { opacity: 1; }
+.lib-del:hover { color: var(--warn); border-color: var(--warn); background: var(--panel); }
 .lib-item.active {
   background: var(--panel-2);
   border-left-color: var(--accent);
@@ -247,3 +264,24 @@ button.mini {
   letter-spacing: 0.4px;
 }
 .tree-controls .snap .chip { color: var(--accent-2); }
+.tree-controls .chip.expand { color: var(--accent); border-color: var(--border); }
+.tree-controls .chip.expand:hover { border-color: var(--accent); }
+
+.tree-row.group-head {
+  cursor: pointer;
+  color: var(--text);
+  user-select: none;
+  gap: 6px;
+}
+.tree-row.group-head:hover { background: var(--panel-2); }
+.tree-row.group-head .caret { color: var(--muted); font-size: 10px; }
+.tree-row .caret.clickable {
+  color: var(--muted);
+  font-size: 10px;
+  cursor: pointer;
+  padding: 0 3px;
+  user-select: none;
+}
+.tree-row .caret.clickable:hover { color: var(--accent); }
+.tree-row .caret-spacer { display: inline-block; width: 12px; }
+.tree-row.group-head .ref { color: var(--accent-2); }

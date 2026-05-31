@@ -34,6 +34,13 @@ export interface Placement {
   repeat?: { count: number; step: Vec3 };
   /** UI label for this placement (e.g. "RHS apartment"). */
   label?: string;
+  /**
+   * Optional UI-only grouping id. When an array (`repeat`) is "expanded" into N
+   * independent placements, they share a group so the tree can show them under
+   * one collapsible header — while each instance keeps its own editable offset
+   * (so you can deliberately misalign one). Ignored by bake.
+   */
+  group?: string;
 }
 
 export interface LeafComponent {

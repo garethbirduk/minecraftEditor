@@ -21,6 +21,9 @@ import { CompositionTree } from "./CompositionTree.js";
 const defaultCategory = (kind: "leaf" | "composite"): string =>
   kind === "leaf" ? "parts" : "composites";
 
+/** Monotonic counter for unique group ids when expanding arrays. */
+let expandSeq = 1;
+
 type SaveState = "idle" | "saving" | "saved" | "error";
 type SyncState = "idle" | "syncing" | "synced" | "error";
 
@@ -172,6 +175,32 @@ export function App(): JSX.Element {
     parent.children.push({ ref: refId, offset: [0, 0, 0], rotationY: 0, mirror: "none" });
     bump();
   };
+  /** How many placements (across all composites) reference this component. */
+  const usageOf = (id: ComponentId): number => {
+    let n = 0;
+    for (const c of lib.components.values()) {
+      if (c.kind === "composite") for (const ch of c.children) if (ch.ref === id) n++;
+    }
+    return n;
+  };
+  const deleteComponent = (id: ComponentId): void => {
+    const comp = lib.components.get(id);
+    if (!comp) return;
+    const uses = usageOf(id);
+    const warn = uses
+      ? `\n\n⚠ It is used by ${uses} placement${uses === 1 ? "" : "s"} in other components — those will show a missing reference until you fix them.`
+      : "";
+    if (!window.confirm(`Delete "${comp.name}" (${id})?${warn}\n\nThis is removed from the library on the next Save.`)) {
+      return;
+    }
+    lib.components.delete(id);
+    categoryRef.current.delete(id);
+    if (selectedId === id) {
+      const next = [...lib.components.keys()][0] ?? "";
+      setSelectedId(next);
+    }
+    bump();
+  };
   const setOffset = (parentId: ComponentId, index: number, axis: 0 | 1 | 2, value: number): void => {
     const parent = lib.components.get(parentId);
     if (parent?.kind !== "composite") return;
@@ -188,6 +217,34 @@ export function App(): JSX.Element {
     parent.children.splice(index, 1);
     bump();
   };
+  // Expand an array (repeat) placement into N independent placements, each with
+  // its own concrete offset (base + k·step). They share a group id so the tree
+  // shows them collapsed under one header, but each can now be moved alone.
+  const expandArray = (parentId: ComponentId, index: number): void => {
+    const parent = lib.components.get(parentId);
+    if (parent?.kind !== "composite") return;
+    const p = parent.children[index];
+    if (!p?.repeat) return;
+    const count = Math.max(1, Math.floor(p.repeat.count));
+    const step = p.repeat.step;
+    const group = `g${expandSeq++}`;
+    const base = p.label ?? lib.components.get(p.ref)?.name ?? p.ref;
+    const expanded = Array.from({ length: count }, (_, k) => ({
+      ref: p.ref,
+      offset: [p.offset[0] + step[0] * k, p.offset[1] + step[1] * k, p.offset[2] + step[2] * k] as [
+        number,
+        number,
+        number,
+      ],
+      rotationY: p.rotationY,
+      mirror: p.mirror,
+      label: `${base} #${k + 1}`,
+      group,
+    }));
+    parent.children.splice(index, 1, ...expanded);
+    bump();
+  };
+
   // Snap a placement so it abuts the PREVIOUS sibling along an axis: copy the
   // previous offset and step by the previous component's footprint (accounting
   // for its rotation). Turns "tile a row" into one click per piece.
@@ -344,6 +401,16 @@ export function App(): JSX.Element {
             className={`lib-item ${c.id === selectedId ? "active" : ""}`}
             onClick={() => setSelectedId(c.id)}
           >
+            <button
+              className="lib-del"
+              title="Delete component"
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteComponent(c.id);
+              }}
+            >
+              ✕
+            </button>
             <div className="name">
               <span className={`kind ${c.kind}`}>{c.kind}</span>
               {c.name}
@@ -402,6 +469,7 @@ export function App(): JSX.Element {
               onSetOffset={setOffset}
               onRemove={removeChild}
               onSnap={snapToPrev}
+              onExpand={expandArray}
             />
           </div>
         )}
