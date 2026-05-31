@@ -1,10 +1,10 @@
 {
   "kind": "composite",
-  "id": "floor",
-  "name": "Floor",
+  "id": "2_houses",
+  "name": "2 Houses",
   "children": [
     {
-      "ref": "room1",
+      "ref": "house",
       "offset": [
         0,
         0,
@@ -14,19 +14,9 @@
       "mirror": "none"
     },
     {
-      "ref": "room1",
+      "ref": "house",
       "offset": [
-        -7,
-        0,
-        0
-      ],
-      "rotationY": 0,
-      "mirror": "none"
-    },
-    {
-      "ref": "room1",
-      "offset": [
-        0,
+        -16,
         0,
         0
       ],

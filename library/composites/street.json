@@ -1,0 +1,27 @@
+{
+  "kind": "composite",
+  "id": "street",
+  "name": "Street",
+  "children": [
+    {
+      "ref": "4_houses",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "4_houses",
+      "offset": [
+        0,
+        0,
+        -25
+      ],
+      "rotationY": 180,
+      "mirror": "none"
+    }
+  ]
+}

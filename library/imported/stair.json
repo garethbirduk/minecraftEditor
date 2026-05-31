@@ -1,0 +1,59 @@
+{
+  "kind": "leaf",
+  "id": "stair",
+  "name": "stair",
+  "size": [
+    2,
+    6,
+    3
+  ],
+  "palette": [
+    {
+      "name": "minecraft:air",
+      "states": {},
+      "version": 18168865
+    },
+    {
+      "name": "minecraft:purpur_pillar",
+      "states": {
+        "pillar_axis": "y"
+      },
+      "version": 18168865
+    },
+    {
+      "name": "minecraft:purpur_pillar",
+      "states": {
+        "pillar_axis": "z"
+      },
+      "version": 18168865
+    }
+  ],
+  "cells": [
+    0,
+    8,
+    1,
+    1,
+    0,
+    1,
+    1,
+    1,
+    0,
+    1,
+    1,
+    1,
+    0,
+    5,
+    2,
+    1,
+    0,
+    3,
+    1,
+    1,
+    0,
+    3,
+    1,
+    1,
+    0,
+    9
+  ]
+}

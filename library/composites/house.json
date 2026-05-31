@@ -1,13 +1,23 @@
 {
   "kind": "composite",
-  "id": "mycomponent",
-  "name": "mycomponent",
+  "id": "house",
+  "name": "House",
   "children": [
     {
-      "ref": "field",
+      "ref": "floor",
       "offset": [
         0,
         0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "floor",
+      "offset": [
+        0,
+        4,
         0
       ],
       "rotationY": 0,
@@ -16,29 +26,19 @@
     {
       "ref": "field",
       "offset": [
-        6,
         0,
-        0
+        -1,
+        -4
       ],
       "rotationY": 0,
       "mirror": "none"
     },
     {
-      "ref": "stairwell",
+      "ref": "field",
       "offset": [
-        2,
-        0,
-        -8
-      ],
-      "rotationY": 0,
-      "mirror": "none"
-    },
-    {
-      "ref": "apartment",
-      "offset": [
-        0,
-        7,
-        0
+        -6,
+        -1,
+        -4
       ],
       "rotationY": 0,
       "mirror": "none"
