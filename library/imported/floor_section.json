@@ -1,0 +1,62 @@
+{
+  "kind": "leaf",
+  "id": "floor_section",
+  "name": "floor_section",
+  "size": [
+    7,
+    4,
+    7
+  ],
+  "palette": [
+    {
+      "name": "minecraft:white_concrete",
+      "states": {},
+      "version": 18168865
+    },
+    {
+      "name": "minecraft:air",
+      "states": {},
+      "version": 18168865
+    }
+  ],
+  "cells": [
+    0,
+    7,
+    1,
+    21,
+    0,
+    7,
+    1,
+    21,
+    0,
+    7,
+    1,
+    21,
+    0,
+    7,
+    1,
+    21,
+    0,
+    7,
+    1,
+    21,
+    0,
+    7,
+    1,
+    21,
+    0,
+    7,
+    1,
+    6,
+    0,
+    1,
+    1,
+    6,
+    0,
+    1,
+    1,
+    6,
+    0,
+    1
+  ]
+}

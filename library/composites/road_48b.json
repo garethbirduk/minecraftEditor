@@ -1,0 +1,27 @@
+{
+  "kind": "composite",
+  "id": "road_48b",
+  "name": "road_48b",
+  "children": [
+    {
+      "ref": "road_24",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "road_24",
+      "offset": [
+        0,
+        0,
+        24
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    }
+  ]
+}

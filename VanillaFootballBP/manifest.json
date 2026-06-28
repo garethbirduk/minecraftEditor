@@ -1,0 +1,17 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Vanilla Football (Ice Boat Soccer)",
+    "description": "Push the boat into the enemy goal across the ice. First to 5 wins.",
+    "uuid": "7b2c1a90-3e44-4f8a-9c21-1d5e6f0a2b34",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 21, 0]
+  },
+  "modules": [
+    {
+      "type": "data",
+      "uuid": "a4f9e2d1-6c83-4b27-9e5a-0f1c2d3e4b56",
+      "version": [1, 0, 0]
+    }
+  ]
+}

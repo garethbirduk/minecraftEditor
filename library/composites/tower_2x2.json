@@ -1,0 +1,47 @@
+{
+  "kind": "composite",
+  "id": "tower_2x2",
+  "name": "tower_2x2",
+  "children": [
+    {
+      "ref": "towersection",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "towersection",
+      "offset": [
+        10,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "towersection",
+      "offset": [
+        0,
+        0,
+        9
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "towersection",
+      "offset": [
+        10,
+        0,
+        9
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    }
+  ]
+}

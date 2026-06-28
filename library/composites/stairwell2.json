@@ -1,0 +1,27 @@
+{
+  "kind": "composite",
+  "id": "stairwell2",
+  "name": "stairwell2",
+  "children": [
+    {
+      "ref": "stairwell-2",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "stairwell-2",
+      "offset": [
+        0,
+        4,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    }
+  ]
+}

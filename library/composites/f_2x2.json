@@ -1,0 +1,47 @@
+{
+  "kind": "composite",
+  "id": "f_2x2",
+  "name": "f-2x2",
+  "children": [
+    {
+      "ref": "floor_section",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "floor_section",
+      "offset": [
+        0,
+        0,
+        7
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "floor_section",
+      "offset": [
+        7,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "floor_section",
+      "offset": [
+        7,
+        0,
+        7
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    }
+  ]
+}

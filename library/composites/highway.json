@@ -1,0 +1,17 @@
+{
+  "kind": "composite",
+  "id": "highway",
+  "name": "highway",
+  "children": [
+    {
+      "ref": "lane3_54",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    }
+  ]
+}

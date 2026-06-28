@@ -1,0 +1,47 @@
+{
+  "kind": "composite",
+  "id": "tower_4x4",
+  "name": "tower_4x4",
+  "children": [
+    {
+      "ref": "tower_2x2",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "tower_2x2",
+      "offset": [
+        20,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "tower_2x2",
+      "offset": [
+        0,
+        0,
+        18
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "tower_2x2",
+      "offset": [
+        20,
+        0,
+        18
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    }
+  ]
+}

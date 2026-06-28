@@ -1,0 +1,47 @@
+{
+  "kind": "composite",
+  "id": "road_24",
+  "name": "road_24",
+  "children": [
+    {
+      "ref": "road_12",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "road_12",
+      "offset": [
+        0,
+        0,
+        -12
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "lamp",
+      "offset": [
+        0,
+        1,
+        -17
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "lamp",
+      "offset": [
+        8,
+        1,
+        -5
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    }
+  ]
+}

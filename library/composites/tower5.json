@@ -1,0 +1,57 @@
+{
+  "kind": "composite",
+  "id": "tower5",
+  "name": "tower5",
+  "children": [
+    {
+      "ref": "tower_4x4",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "tower_4x4",
+      "offset": [
+        0,
+        4,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "tower_4x4",
+      "offset": [
+        0,
+        8,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "tower_4x4",
+      "offset": [
+        0,
+        12,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "tower_4x4",
+      "offset": [
+        0,
+        16,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    }
+  ]
+}

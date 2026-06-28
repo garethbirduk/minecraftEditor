@@ -1,0 +1,27 @@
+{
+  "kind": "composite",
+  "id": "lane1_36",
+  "name": "lane1_36",
+  "children": [
+    {
+      "ref": "lane1_18",
+      "offset": [
+        18,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    },
+    {
+      "ref": "lane1_18",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "rotationY": 0,
+      "mirror": "none"
+    }
+  ]
+}
